@@ -38,10 +38,7 @@ upsert_ticket_item: >
   ON DUPLICATE KEY UPDATE 
     stock_status = VALUES(stock_status),
     price = VALUES(price),
-    updated_at = NOW()
-
-
-
+    updated_at = NO
 
 # 批量更新 SKU 库存信息
 upsert_ticket_item: >
