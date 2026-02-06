@@ -19,8 +19,8 @@ class Config:
     from_attributes = True
 
 class OrderTaskCreate(BaseModel):
-    city: str = Field(..., example="上海", description="抢票目标城市")
-    artist: str = Field(..., example="周杰伦", description="艺人或演出名称")
+    city: str = Field(..., description="抢票目标城市")
+    artist: str = Field(..., description="艺人或演出名称")
     target_date: Optional[date] = Field(None, description="目标演出日期")
     target_price: Optional[float] = Field(None, description="目标票价")
     customer_info: str = Field(..., description="实名人信息(姓名+身份证)")

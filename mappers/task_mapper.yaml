@@ -1,8 +1,3 @@
-# 获取所有待处理任务
-get_pending_tasks: >
-  SELECT * FROM order_tasks 
-  WHERE status = 0 
-  ORDER BY created_at DESC
 
 # 更新任务状态 (抢票成功/失败/撤单)
 update_task_status: >
@@ -10,23 +5,8 @@ update_task_status: >
   SET status = %(status)s, created_at = NOW()
   WHERE id = %(id)s
 
-# 根据艺人匹配任务
-find_tasks_by_artist: >
-  SELECT * FROM order_tasks 
-  WHERE artist LIKE CONCAT('%%', %(artist)s, '%%') AND status = 0
 
-
-# 获取设备可领取的任务：
-# 逻辑：查找状态为 0 (待领取)，且该任务所属分组包含该 SN 的设备
-get_matchable_task: >
-  SELECT t.* FROM order_tasks t
-  JOIN device_group_link l ON t.group_id = l.group_id
-  WHERE l.device_sn = %(sn)s 
-  AND t.status = 0
-  ORDER BY t.priority DESC, t.created_at ASC
-  LIMIT 10
-
-
+# 创建抢票任务
 create_order_task: >
   INSERT INTO order_tasks (
     city, artist, target_date, target_price, 
@@ -37,3 +17,7 @@ create_order_task: >
     %(customer_info)s, %(priority_order)s, %(bounty)s, 
     %(contact_phone)s, 0, NOW()
   )
+
+  # 获取所有抢票任务（管理后台看板使用）
+get_all_tasks: >
+  SELECT * FROM order_tasks ORDER BY created_at DESC
