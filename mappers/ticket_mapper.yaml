@@ -6,11 +6,17 @@ get_all_ticket_items: >
 
 # 搜索唯一的项目标题（用于下拉菜单展示）
 search_projects: >
-  SELECT item_id, project_title, venue_name, MIN(perform_time) as start_time
+  SELECT 
+    item_id, 
+    project_title, 
+    venue_name, 
+    MIN(perform_time) as start_time
   FROM ticket_items
-  WHERE project_title LIKE CONCAT('%%', %(keyword)s, '%%')
+  WHERE 
+  (%(keyword)s = '' OR project_title LIKE CONCAT('%%', %(keyword)s, '%%'))
   GROUP BY item_id, project_title, venue_name
-  LIMIT 20
+  ORDER BY start_time DESC
+  LIMIT 10
 
 # 获取该演出的所有明细
 get_project_details: >
