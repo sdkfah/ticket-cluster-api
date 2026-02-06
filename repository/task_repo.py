@@ -15,7 +15,7 @@ class TaskRepository(BaseRepository):
         }
         return self.execute("task_mapper", "update_task_status", task_data)
  
-    def create_order_task(self, task_data: dict):
-        return self.execute("task_mapper", "create_order_task", task_data)
+    def create_task(self, task_data: dict):
+        return self.execute("task_mapper", "create_task", task_data)
 
    
