@@ -1,6 +1,5 @@
 # repository/__init__.py
 import os
-from .base_repo import BaseRepository
 from .device_repo import DeviceRepository
 from .log_repo import LogRepository
 from .ticket_repo import TicketRepository

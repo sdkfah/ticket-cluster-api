@@ -1,23 +1,21 @@
 
-# 更新任务状态 (抢票成功/失败/撤单)
-update_task_status: >
+# 获取任务列表（支持分页和状态筛选）
+get_task_list: >
+  SELECT * FROM order_tasks 
+  WHERE (%(status)s IS NULL OR status = %(status)s)
+  LIMIT %(offset)s, %(limit)s
+
+# 核心：根据票档价格和名称匹配任务
+find_matched_tasks: >
+  SELECT id, artist, customer_info, bounty, created_at 
+  FROM order_tasks 
+  WHERE status = 0 
+    AND target_price = %(price)s 
+    AND artist LIKE CONCAT('%', %(title)s, '%')
+  ORDER BY bounty DESC
+
+# 指派任务：更新任务关联的 SKU
+assign_task_to_sku: >
   UPDATE order_tasks 
-  SET status = %(status)s, created_at = NOW()
-  WHERE id = %(id)s
-
-
-# 创建抢票任务
-create_order_task: >
-  INSERT INTO order_tasks (
-    city, artist, target_date, target_price, 
-    customer_info, priority_order, bounty, 
-    contact_phone, status, created_at
-  ) VALUES (
-    %(city)s, %(artist)s, %(target_date)s, %(target_price)s, 
-    %(customer_info)s, %(priority_order)s, %(bounty)s, 
-    %(contact_phone)s, 0, NOW()
-  )
-
-  # 获取所有抢票任务（管理后台看板使用）
-get_all_tasks: >
-  SELECT * FROM order_tasks ORDER BY created_at DESC
+  SET sku_id = %(sku_id)s, updated_at = NOW() 
+  WHERE id = %(task_id)s
