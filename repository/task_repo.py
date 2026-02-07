@@ -18,4 +18,8 @@ class TaskRepository(BaseRepository):
     def create_task(self, task_data: dict):
         return self.execute("task_mapper", "create_task", task_data)
 
+    def delete_task(self, task_id: int):
+        params = {"id": task_id}
+        return self.execute("task_mapper", "delete_task", params)
+
    
